@@ -44,7 +44,7 @@ public class registrationController {
         return true;
     }
 
-    public boolean checkForSpaces(String in) {
+    private boolean checkForSpaces(String in) {
         char test;
         for (int i = 0; i < in.length(); i++) {
             test = in.charAt(i);

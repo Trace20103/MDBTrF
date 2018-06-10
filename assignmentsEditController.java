@@ -146,7 +146,7 @@ public class assignmentsEditController {
             Alert dAlert = new Alert(Alert.AlertType.INFORMATION);
             dAlert.setTitle("Ошбика");
             dAlert.setHeaderText(null);
-            dAlert.setContentText("У вас недостаточно прав для удаления задания");
+            dAlert.setContentText("У вас недостаточно прав для удаления задания!");
             dAlert.showAndWait();
             return;
         }

@@ -17,8 +17,6 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class assignmentsAddController {
-    public static int currentAsgID;
-
     @FXML
     protected TextField diffField;
 
@@ -32,7 +30,7 @@ public class assignmentsAddController {
     /**
      * Check for the spaces only vlues in the text fields
      **/
-    public boolean checkForSpaces(String in) {
+    private boolean checkForSpaces(String in) {
         char test;
         for (int i = 0; i < in.length(); i++) {
             test = in.charAt(i);
@@ -124,7 +122,7 @@ public class assignmentsAddController {
      * Standard scene change procedure.
      **/
     @FXML
-    public void backButtonPressed(ActionEvent event) throws IOException {
+    protected void backButtonPressed(ActionEvent event) throws IOException {
         Parent tablePage = FXMLLoader.load(getClass().getResource("Assignments.fxml"));
         Scene tableScene = new Scene(tablePage);
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

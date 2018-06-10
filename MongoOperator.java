@@ -10,14 +10,14 @@ import java.io.*;
  * Standard Java driver didn't have the opportunity to work with direct queries
  * so I had to use mongo Shell directly from application through the cmd process
  **/
-public class MongoOperator {
+class MongoOperator {
 
     /**
      * This command here resets the DB to the point it was never accessed before.
      * Using the json file here. Still it takes too much time to do that
      * after each assignment session.
      **/
-    public void resetDB() throws IOException {
+    void resetDB() throws IOException {
         ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "mongoimport --db video --collection movies --mode=upsert  --type json --file src/sample/config/movies.json");
         builder.redirectErrorStream(true);
         Process p = builder.start();
@@ -39,7 +39,7 @@ public class MongoOperator {
      * The string which is operated with is then returned with / before " symbols
      * just to make sure it works correctly. Just a quick fix, nothing interesting.
      **/
-    public String fixShellSymbols(String oldString) {
+    private String fixShellSymbols(String oldString) {
         final char dm = (char) 34;
         String r = "/" + dm;
         oldString = oldString.replace(Character.toString(dm), r);
@@ -53,7 +53,7 @@ public class MongoOperator {
      * So, first we fix the " symbols, then the execution. Just like that we get the response
      * that user would get if he'd use the mongoDB shell directly from cmd.
      **/
-    public String getQueryResult(String sentQuery) throws IOException {
+    String getQueryResult(String sentQuery) throws IOException {
         sentQuery = fixShellSymbols(sentQuery);
         String res;
         Runtime rt = Runtime.getRuntime();

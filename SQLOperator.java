@@ -8,7 +8,7 @@ import java.sql.*;
  * Almost every function needs to access the DB. So that class allows to do that more or less painfully
  * Lots of procedures and functions here. But most of them are simple.
  **/
-public class SQLOperator {
+class SQLOperator {
     private static String loginR;
     private static String passwordR;
 
@@ -16,11 +16,11 @@ public class SQLOperator {
      * Just to make sure servers are responding or login info is correct.
      * btw login config file is located /src/sample/config
      **/
-    public int testConnection(String userLogin, String userPassword) {
+    int testConnection(String userLogin, String userPassword) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + userLogin + "&" + "password=" + userPassword + "&serverTimezone=UTC");
-            this.loginR = userLogin;
-            this.passwordR = userPassword;
+            loginR = userLogin;
+            passwordR = userPassword;
             connection.close();
             return 0;
         } catch (SQLException e) {
@@ -30,24 +30,10 @@ public class SQLOperator {
     }
 
     /**
-     * Need this for the table filling function. Looks dumb, but it has its impact (probably)
-     **/
-    public Connection Connect() {
-        try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
-            return connection;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
      * Standard procedure call after the connection to the DB
      **/
-    public void addAssignment(int UID, String uDiff, String uText, String uQuery) throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+    void addAssignment(int UID, String uDiff, String uText, String uQuery) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("CALL `addAssignment`(?, ?, ?, ?)");
         statementP.setInt(1, UID);
         statementP.setString(2, uDiff);
@@ -58,8 +44,8 @@ public class SQLOperator {
     }
 
 
-    public void updateAssignment(int AID, String nDiff, String nText, String nQuery) throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+    void updateAssignment(int AID, String nDiff, String nText, String nQuery) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("CALL `updateAssignment`(?, ?, ?, ?)");
         statementP.setInt(1, AID);
         statementP.setString(2, nDiff);
@@ -69,9 +55,9 @@ public class SQLOperator {
         connection.close();
     }
 
-    public String getAssignmentDifficulty(int AID) throws SQLException {
+    String getAssignmentDifficulty(int AID) throws SQLException {
         String res = "";
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("SELECT asg_Diff FROM assignments WHERE asg_ID = ?");
         statementP.setInt(1, AID);
         statementP.execute();
@@ -83,16 +69,16 @@ public class SQLOperator {
         return res;
     }
 
-    public void dropAssignment(int AID) throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+    void dropAssignment(int AID) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("DELETE FROM assignments WHERE asg_ID = ?");
         statementP.setInt(1, AID);
         statementP.execute();
         connection.close();
     }
 
-    public void setUserAssignment(int AID, int UID) throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+    void setUserAssignment(int AID, int UID) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("CALL `setUsersAssignment`(? , ?)");
         statementP.setInt(1, AID);
         statementP.setInt(2, UID);
@@ -100,9 +86,9 @@ public class SQLOperator {
         connection.close();
     }
 
-    public boolean checkIfAssignmentCompleted(int AID, int UID) throws SQLException {
+    boolean checkIfAssignmentCompleted(int AID, int UID) throws SQLException {
         int res = -1;
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("SELECT Count(*) FROM usersassignments WHERE asg_ID = ? AND user_ID = ?");
         statementP.setInt(1, AID);
         statementP.setInt(2, UID);
@@ -119,9 +105,9 @@ public class SQLOperator {
         }
     }
 
-    public String getAssignmentText(int asgID) throws SQLException {
+    String getAssignmentText(int asgID) throws SQLException {
         String res = "";
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("CALL `getAssignmentText`(?)");
         statementP.setInt(1, asgID);
         statementP.execute();
@@ -133,9 +119,9 @@ public class SQLOperator {
         return res;
     }
 
-    public String getAssignmentQuery(int asgID) throws SQLException {
+    String getAssignmentQuery(int asgID) throws SQLException {
         String res = "";
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("SELECT asg_Query FROM assignments WHERE asg_ID = ?");
         statementP.setInt(1, asgID);
         statementP.execute();
@@ -147,9 +133,9 @@ public class SQLOperator {
         return res;
     }
 
-    public int getUsersDate(int userID) throws SQLException {
+    int getUsersDate(int userID) throws SQLException {
         int res = 0;
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("CALL `getUsersDate`(?)");
         statementP.setInt(1, userID);
         statementP.execute();
@@ -161,17 +147,17 @@ public class SQLOperator {
         return res;
     }
 
-    public ResultSet getAllAssignmetns() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+    ResultSet getAllAssignmetns() throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("CALL `getAllAssignments`()");
         statementP.execute();
         ResultSet resultSet = statementP.getResultSet();
         return resultSet;
     }
 
-    public int getAssignmentID(String asgText1) throws SQLException {
+    int getAssignmentID(String asgText1) throws SQLException {
         int res = 0;
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("CALL `getAssignmentID`(?)");
         statementP.setString(1, asgText1);
         statementP.execute();
@@ -183,9 +169,9 @@ public class SQLOperator {
         return res;
     }
 
-    public int  addUserToDB(String UName, String ULogin, String UPassword) throws SQLException {
+    int  addUserToDB(String UName, String ULogin, String UPassword) throws SQLException {
         int res = -1;
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC&characterEncoding=UTF-8");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC&characterEncoding=UTF-8");
         PreparedStatement statementP = connection.prepareStatement("SELECT User_ID FROM users WHERE User_Login = ?");
         statementP.setString(1 ,ULogin);
         statementP.execute();
@@ -212,9 +198,9 @@ public class SQLOperator {
         }
     }
 
-    public int getUsersAssignments(int userID) throws SQLException {
+    int getUsersAssignments(int userID) throws SQLException {
         int res = -1;
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("CALL `getUsersAssignmentsCount`(?)");
         statementP.setInt(1, userID);
         statementP.execute();
@@ -226,9 +212,9 @@ public class SQLOperator {
         return res;
     }
 
-    public int checkLogin(String userLogin, String userPassword) throws SQLException {
+    int checkLogin(String userLogin, String userPassword) throws SQLException {
         int res = -1;
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("SELECT User_ID FROM users WHERE User_Login = ? AND User_Password = password(?)");
         statementP.setString(1, userLogin);
         statementP.setString(2, userPassword);
@@ -241,9 +227,9 @@ public class SQLOperator {
         return res;
     }
 
-    public int getUserID(String userLogin) throws SQLException {
+    int getUserID(String userLogin) throws SQLException {
         int res = -1;
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("SELECT User_ID FROM users WHERE User_Login = ?");
         statementP.setString(1, userLogin);
         statementP.execute();
@@ -255,9 +241,9 @@ public class SQLOperator {
         return res;
     }
 
-    public int getUserRole(String userLogin) throws SQLException {
+    int getUserRole(String userLogin) throws SQLException {
         int res = -1;
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("SELECT User_Role FROM users WHERE User_Login = ?");
         statementP.setString(1, userLogin);
         statementP.execute();
@@ -268,9 +254,9 @@ public class SQLOperator {
         return res;
     }
 
-    public String getUserName(String userLogin) throws SQLException {
+    String getUserName(String userLogin) throws SQLException {
         String res = "-1";
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + this.loginR + "&" + "password=" + this.passwordR + "&serverTimezone=UTC");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mongot?user=" + loginR + "&" + "password=" + passwordR + "&serverTimezone=UTC");
         PreparedStatement statementP = connection.prepareStatement("SELECT User_Name FROM users WHERE User_Login = ?");
         statementP.setString(1, userLogin);
         statementP.execute();
